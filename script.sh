@@ -26,6 +26,7 @@ echo ""
 # Instalación de dependencias en el Front
 echo "---- Ejecutando npm i en FRONT ----"
 echo ""
+cd ..
 cd frontend
 npm i --force
 echo ""
@@ -35,6 +36,7 @@ echo ""
 
 echo ""
 echo "---- Generando env del Front ----"
+cd ..
 # Ruta completa del archivo .env que deseas crear
 ARCHIVO_ENV_FRONT="frontend/.env"
 
@@ -43,9 +45,14 @@ if [ -e "$ARCHIVO_ENV_FRONT" ]; then
     echo "El archivo $ARCHIVO_ENV_FRONT ya existe."
 fi
 
+echo "FAVOR INGRESAR IP DEL BACKEND EJ: localhost"
+read IP_BACKEND
+
+echo "FAVOR INGRESAR EL PUERTO DEL BACKEND EJ: 3001"
+read PUERTO_BACKEND
 
 cat << EOF > "$ARCHIVO_ENV_FRONT"
-VITE_BACKEND_URL='http://localhost:3001'
+VITE_BACKEND_URL='http://$IP_BACKEND:$PUERTO_BACKEND'
 EOF
 
 echo "Archivo .env del Front creado exitosamente."
@@ -74,21 +81,17 @@ read PASSWORD_POSTGRES
 echo "FAVOR INGRESAR EL NOMBRE DE LA BASE DE DATOS EJ: notesapp_database"
 read DB_POSTGRES
 
-
-
+echo "FAVOR INGRESAR URL COMPLETA DEL FRONT POR CONCEPTO DE CORS"
+read CORS
 
 # Crear y escribir en el archivo .env
 cat << EOF > "$ARCHIVO_ENV_BACK"
 DATABASE_URL='postgresql://$USUARIO_POSTGRES:$PASSWORD_POSTGRES@$IP_POSTGRES:$PUERTO_POSTGRES/$DB_POSTGRES'
-CORS='http://localhost:5173'
+CORS='$CORS'
 JWT_SECRET='12345678'
 EOF
 
 echo "Archivo .env del Back creado exitosamente."
-
-
-
-
 
 # Generación de la base de datos 
 echo "---- Generando base de datos ----"
@@ -111,6 +114,5 @@ echo ""
 echo "---- Script Finalizado ----"
 echo ""
 echo ""
-
 
 
